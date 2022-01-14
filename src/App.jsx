@@ -4,15 +4,43 @@ import React, { useState } from "react";
 
 export const App = () => {
   const [todoText, setTodoText] = useState("");
-  const [incomleteTodos, setIncompleteTodos] = useState(["a","iiii"]);
+  const [incompleteTodos, setIncompleteTodos] = useState(["a","iiii"]);
 
-  const [compliteTodos, setCompleteTodos] = useState(["uuuu"]);
+
+  const [completeTodos, setCompleteTodos] = useState(["uuuu"]);
 
   const onChangeTodoText = (event) => setTodoText(event.target.value);
 
   const onClickAdd = () => {
-    alert(todoText);
+    if (todoText === "") return;
+    const newTodos = [...incompleteTodos, todoText];
+    setIncompleteTodos(newTodos);
+    setTodoText("");
   };
+
+  const onClickDelete = (index) => {
+    const newTodos = [...incompleteTodos];
+    newTodos.splice(index, 1)
+    setIncompleteTodos(newTodos);
+  }
+
+  const onClickComplete = (index) => {
+    const newIncompleteTodos = [...incompleteTodos];
+    newIncompleteTodos.splice(index, 1);
+
+    const newCompleteTodos = [...completeTodos, incompleteTodos[index]]
+    setIncompleteTodos(newIncompleteTodos);
+    setCompleteTodos(newCompleteTodos);
+  };
+
+  const onClickBack = (index) => {
+    const newCompleteTodos = [...completeTodos];
+    newCompleteTodos.splice(index, 1);
+
+    const newIncompleteTodos = [...incompleteTodos, completeTodos[index]]
+    setIncompleteTodos(newIncompleteTodos);
+    setCompleteTodos(newCompleteTodos);
+  }
 
   return (
     <>
@@ -23,13 +51,14 @@ export const App = () => {
       <div>
         <p>未完了のTODO</p>
         <ul>
-          {incomleteTodos.map((todo) => {
+          {incompleteTodos.map((todo, index) => {
             return (
           <li key={ todo }>
             { todo }
             <p>aaa</p>
-            <button>fdfdfddfd</button>
-            <button>削除</button>
+            <button onClick={() => onClickComplete(index)}>完了</button>
+            <button onClick={() => onClickDelete(index)}>削除</button>
+            {/* 引数を渡すときは関数を作る */}
           </li>
 
             )
@@ -44,10 +73,11 @@ export const App = () => {
       <div>
         <p>完了のTODO</p>
         <ul>
-          {compliteTodos.map((todo) => {
+          {completeTodos.map((todo, index) => {
             return (
-              <li key={todo}>{todo}
-              <button>もどす</button></li>
+              <li key={todo}>
+                {todo}
+              <button onClick={() => onClickBack(index)}>もどす</button></li>
             )
           })}
           <li>
