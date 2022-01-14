@@ -1,6 +1,10 @@
 /* eslint array-callback-return: off */
 /* eslint no-unused-vars: off */
 import React, { useState } from "react";
+import { InputTodo } from "./components/InputTodo.jsx";
+//           ↑  ↓ export default じゃないので {} がいるよー
+import { IncompleteTodos } from "./components/IncompleteTodos.jsx";
+import { CompleteTodos } from "./components/CompleteTodos.jsx";
 
 export const App = () => {
   const [todoText, setTodoText] = useState("");
@@ -44,48 +48,9 @@ export const App = () => {
 
   return (
     <>
-      <div>
-        <input placeholder="TODOを入力" value={todoText} onChange={onChangeTodoText}/>
-        <button onClick={onClickAdd}>追加</button>
-      </div>
-      <div>
-        <p>未完了のTODO</p>
-        <ul>
-          {incompleteTodos.map((todo, index) => {
-            return (
-          <li key={ todo }>
-            { todo }
-            <p>aaa</p>
-            <button onClick={() => onClickComplete(index)}>完了</button>
-            <button onClick={() => onClickDelete(index)}>削除</button>
-            {/* 引数を渡すときは関数を作る */}
-          </li>
-
-            )
-          })}
-          <li>
-            <p>iii</p>
-            <button>完了</button>
-            <button>削除</button>
-          </li>
-        </ul>
-      </div>
-      <div>
-        <p>完了のTODO</p>
-        <ul>
-          {completeTodos.map((todo, index) => {
-            return (
-              <li key={todo}>
-                {todo}
-              <button onClick={() => onClickBack(index)}>もどす</button></li>
-            )
-          })}
-          <li>
-            <p>aaa</p>
-            <button>戻す</button>
-          </li>
-        </ul>
-      </div>
+      <InputTodo todoText={todoText} onChange={onChangeTodoText} onClick={onClickAdd} />
+      <IncompleteTodos todos={incompleteTodos} onClickComplete={onClickComplete} onClickDelete={onClickDelete} />
+      <CompleteTodos onClickBack={onClickBack} completeTodos={completeTodos} />
     </>
   );
 }
